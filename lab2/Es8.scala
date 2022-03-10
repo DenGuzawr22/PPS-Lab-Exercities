@@ -52,4 +52,7 @@ class Es8 {
 
   @Test def canMap2NoneValue(): Unit =
     assertEquals(None(), map2(value, none)(_ + _))
+
+  @Test def canMap2AddValues(): Unit =
+    assertEquals(Some(10), map2(value, value)(_ + _))
 }
