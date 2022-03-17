@@ -1,4 +1,4 @@
-package lab
+package lab2
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*

@@ -1,4 +1,4 @@
-package lab
+package lab2
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
@@ -15,19 +15,12 @@ class Es8 {
     case _ => None()
 
   def map[A](value: Option[A])(f: A => Boolean): Option[Boolean] = value match
-    case Some(v: A) if f(v) => Some(true)
-    case Some(v: A) if !f(v) => Some(false)
+    case Some(v: A) => Some(f(v))
     case _ => None()
 
-  def map2[A](op1: Option[A], op2: Option[A])(f: (A, A) => A): Option[A] =
-    def _isPresent(op: Option[A]): Boolean = op match
-      case Some(x) => true
-      case _ => false
-    def _getValue(op: Option[A]): A  = op match
-      case Some(x) => x
-    _isPresent(op1) && _isPresent(op2) match
-      case true => Some(f(_getValue(op1),_getValue(op2)))
-      case _ => None()
+  def map2[A](op1: Option[A], op2: Option[A])(f: (A, A) => A): Option[A] = (op1, op2) match
+    case (Some(a: A), Some(b: A)) => Some(f(a, b))
+    case _ => None()
 
   val value: Some[Int]  = Some(5)
   val none: None[Int] = None[Int]()

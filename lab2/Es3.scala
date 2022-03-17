@@ -1,4 +1,4 @@
-package lab
+package lab2
 
 import org.junit.jupiter.api.Assertions.{assertEquals, assertFalse, assertNotEquals, assertTrue}
 import org.junit.jupiter.api.{Test}

@@ -1,4 +1,4 @@
-package lab
+package lab2
 
 import org.junit.jupiter.api.Assertions.{assertEquals}
 import org.junit.jupiter.api.{Test}
@@ -10,6 +10,7 @@ class Es5 {
 
   def compose(f: Int => Int, g: Int => Int): Int => Int = (x: Int) => f(g(x))
   def genericCompose[A](f: A => A, g: A => A): A => A = (x: A) => f(g(x))
+  def superGenericCompose[A, B, C](f: B => C, g: A => B): A => C = (x: A) => f(g(x))
 
   @Test def canCompose(): Unit =
     assertEquals(9, compose(fInt, gInt)(5))
@@ -21,4 +22,9 @@ class Es5 {
     val fString: String => String = "a" concat _
     val gString: String => String = _ concat "cc"
     assertEquals("abcc", genericCompose(fString, gString)("b"))
+
+  @Test def testSuperGenericCompose(): Unit =
+    val f: Int => Int = _ + 100
+    val g: String => Int = _.length
+    assertEquals(104, superGenericCompose(f, g)("bbbb"))
 }
