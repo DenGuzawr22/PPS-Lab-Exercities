@@ -113,6 +113,7 @@ enum List[A]:
 
   def takeRight2(n: Int): List[A] = this.zipRight.filter((h,i) => i > this.length-1-n ).map((h,i) => h)
 
+  def collect[B](pf: PartialFunction[A,B]): List[B] = this.filter(f => pf.isDefinedAt(f)).map(m => pf.apply(m))
 
 // Factories
 object List:

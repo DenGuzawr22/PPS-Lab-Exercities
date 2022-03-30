@@ -38,3 +38,9 @@ class ListTest:
   @Test def testTakeRight2(): Unit =
     assertEquals(List(2, 3, 4), reference.takeRight2(3))
 
+  @Test def testCollect(): Unit =
+    def pf: PartialFunction[Int, String] = _ match
+      case n if n > 0 => "pos"
+      case 0 => "zero"
+    assertEquals(List("zero", "pos", "pos"), List(0, 5, -3, 9).collect(pf))
+
