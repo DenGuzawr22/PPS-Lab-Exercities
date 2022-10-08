@@ -121,14 +121,29 @@ count([H|T], N) :-
 
 dropRight([], N, []).
 dropRight(L, N, []) :- sizeD(L,Size), N >= Size.
-dropRight([H|T], N, [H]) :- sizeD(T,Size), Size =:= N.
 dropRight([H|T], N, [H|T2]) :-
 	sizeD(T,Size), 
-	Size > N,
+	Size >= N,
 	dropRight(T, N, T2).
 %dropRight([a,b,c,d], 5, X). -> X/[]
 %dropRight([a,b,c,d], 4, X). -> X/[]
 %dropRight([a,b,c,d], 2, X). -> X/[a,b]
+
+%This solution do not use size but is not tail recursion
+dropRight2(L, N, R) :- dropRight2(L, N, R, C).
+dropRight2([], N, [],  0).
+dropRight2([H|T], N, R, C2) :-  dropRight2(T, N, R, C), C2 is C + 1, C2 =< N.
+dropRight2([H|T], N, [H|T2], C2) :- dropRight2(T, N, T2, C), C2 is C + 1, C2 > N.
+
+%best solution (use only one size function and is a tail recursion)
+dropRight(L, N, R) :- sizeD(L, Size), dropRight(L, N, R, Size).
+dropRight([H|T], N, [H| T2], Size) :- Size > N, Size2 is Size - 1, dropRight(T, N, T2, Size2).
+dropRight(L, N, [], Size) :- Size =< N.
+
+
+dropRight(L, N, R) :- sizeD(L, Size), dropRight(L, N, R, Size).
+dropRight([H|T], N, [H| T2], Size) :- Size > N, Size2 is Size - 1, dropRight(T, N, T2, Size2).
+dropRight(L, N, [], Size) :- Size =< N.
 
 dropWhile([], []).
 dropWhile([H|T], [H|T]) :- H =< 0.
