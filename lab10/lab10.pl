@@ -155,6 +155,10 @@ partition([H|T], [H|A], B) :- H > 0, partition(T,A,B).
 partition([H|T], A, [H|B]) :- H =< 0, partition(T,A,B).
 %partition([-1,1,0,2,-2], A, B). -> A/[1,2] , B/[-1,0,-2]
 
+partition2([], [], []).
+partition2([H|T], [], [H|T]) :- H > 0.
+partition2([H|T], [H | T2], P2) :- H =< 0, partition2(T, T2, P2).
+
 
 reversed(L, R) :- reversed(L, [], R).
 reversed([H|T], A, R) :- reversed(T, [H|A], R).
@@ -162,13 +166,16 @@ reversed([], A, A).
 %reversed([1,2,3], X). -> X/[3,2,1]
 %reverse(X, [3,2,1]). -> X/[1,2,3]
 
+
+drop([], N, []).
 drop(L, 0, L).
-drop([H|T], N, T2) :- drop(T, N2, T2), N is 1 + N2. 
+drop([H|T], N, R) :- N2 is N - 1, drop(T, N2, R).
 %drop([1,2,3,4,5], 3, X). -> X/[4,5]
 %drop([1,2,3,4,5], X, [3,4,5]). -> X/2
 
 take(L, 0, []).
-take([H|T], N, [H|T2]) :- take(T, N2, T2), N is 1 + N2.
+take([], N, []).
+take([H|T], N, [H|T2]) :- N2 is N-1, take(T, N2, T2).
 %take([1,2,3,4,5], 3, X). ->  X/[1,2,3]
 %take([1,2,3,4,5], X, [1,2]). -> X/2
 
@@ -177,6 +184,3 @@ zip([], [], []).
 zip([H|T], [H2|T2], [(H,H2)|T3]) :- zip(T, T2, T3).
 %zip([1,2,3], [a,b,c], X). -> X/[(1,a),(2,b),(3,c)]
 %zip(X, Y, [(1,a),(2,b),(3,c)]). -> X/[1,2,3], Y/[a,b,c]
-
-
-
