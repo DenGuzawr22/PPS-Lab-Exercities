@@ -136,14 +136,10 @@ dropRight2([H|T], N, R, C2) :-  dropRight2(T, N, R, C), C2 is C + 1, C2 =< N.
 dropRight2([H|T], N, [H|T2], C2) :- dropRight2(T, N, T2, C), C2 is C + 1, C2 > N.
 
 %best solution (use only one size function and is a tail recursion)
-dropRight(L, N, R) :- sizeD(L, Size), dropRight(L, N, R, Size).
-dropRight([H|T], N, [H| T2], Size) :- Size > N, Size2 is Size - 1, dropRight(T, N, T2, Size2).
-dropRight(L, N, [], Size) :- Size =< N.
+dropRight3(L, N, R) :- sizeD(L, Size), dropRight3(L, N, R, Size).
+dropRight3([H|T], N, [H| T2], Size) :- Size > N, Size2 is Size - 1, dropRight3(T, N, T2, Size2).
+dropRight3(L, N, [], Size) :- Size =< N.
 
-
-dropRight(L, N, R) :- sizeD(L, Size), dropRight(L, N, R, Size).
-dropRight([H|T], N, [H| T2], Size) :- Size > N, Size2 is Size - 1, dropRight(T, N, T2, Size2).
-dropRight(L, N, [], Size) :- Size =< N.
 
 dropWhile([], []).
 dropWhile([H|T], [H|T]) :- H =< 0.
