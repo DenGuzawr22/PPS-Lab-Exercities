@@ -62,5 +62,3 @@ anypath([e(A,_)|T], FN, LN, L) :- anypath(T, FN, LN, L).
 %Suppose the graph is NOT circular!
 allreaching(G, N, L) :- findall(K,  (anypath(G, N, K, R)), L).
 %allreaching([e(1,2),e(2,3),e(3,5)],1, X). -> X / [2,3,5]
-
-                                                                                                                                                                                     
