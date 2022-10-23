@@ -2,15 +2,18 @@ dropFirst(X, [X|T], T) :- !.
 dropFirst(X, [H|T], [H|T2]) :- dropFirst(X, T, T2). 
 %dropFirst(10, [20, 10, 30,10,40], X) -> X / [20,30,10,40]
 
-dropLast(X, [X | T], [X | T2]) :- dropLast(X, T, T2), !.
+
+dropLast(X, [A|T], [A|B]) :- dropLast(X, T, B), !.
 dropLast(X, [X|T], T).
-dropLast(X, [H | T], [H | T2]) :- dropLast(X, T , T2).
 %dropLast(10, [20, 10, 30,10,40], X) ->  X / [20,10,30,40]
 
 dropLast2(E, [], []).
 dropLast2(E, [H|T], [H|T2]) :- member(E, T), !,  dropLast2(E, T, T2). 
 dropLast2(E, [H|T], T).
 
+dropLast3(X, [X | T], [X | T2]) :- dropLast3(X, T, T2), !.
+dropLast3(X, [X|T], T).
+dropLast3(X, [H | T], [H | T2]) :- dropLast3(X, T , T2).
 
 dropAll(X, [X|T], T2) :- dropAll(X, T, T2), !.
 dropAll(X, [], []).
