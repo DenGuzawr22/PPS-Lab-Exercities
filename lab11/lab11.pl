@@ -3,7 +3,7 @@ dropFirst(X, [H|T], [H|T2]) :- dropFirst(X, T, T2).
 %dropFirst(10, [20, 10, 30,10,40], X) -> X / [20,30,10,40]
 
 
-dropLast(X, [A|T], [A|B]) :- dropLast(X, T, B), !.
+dropLast(X, [A|T], [A|B]) :-  dropLast(X, T, B), !.
 dropLast(X, [X|T], T).
 %dropLast(10, [20, 10, 30,10,40], X) ->  X / [20,10,30,40]
 
@@ -15,7 +15,7 @@ dropLast3(X, [X | T], [X | T2]) :- dropLast3(X, T, T2), !.
 dropLast3(X, [X|T], T).
 dropLast3(X, [H | T], [H | T2]) :- dropLast3(X, T , T2).
 
-dropAll(X, [X|T], T2) :- dropAll(X, T, T2), !.
+dropAll(X, [X|T], T2) :- !, dropAll(X, T, T2).
 dropAll(X, [], []).
 dropAll(X, [H|T], [H|T2]) :- dropAll(X, T, T2).
 %dropAll(10, [20, 10, 30,10,40], X) -> X / [20,30,40]
@@ -31,7 +31,7 @@ fromCircList([H1, H2|T], [e(H1, H2)| T2], F) :- fromCircList([H2| T] , T2, F).
 % in_degree(+Graph , +Node , -Deg)
 % Deg is the number of edges leading into Node
 in_degree([], N, 0).
-in_degree([e(_,N)| T], N, C2) :- in_degree(T, N, C), C2 is C + 1, !.
+in_degree([e(_,N)| T], N, C2) :- !, in_degree(T, N, C), C2 is C + 1.
 in_degree([e(_,X)| T], N, C) :- in_degree(T, N, C), !.
 %in_degree([e(1,2), e(1,3), e(3,2)], 1, X). -> X/0
 %in_degree([e(1,2), e(1,3), e(3,2)], 2, X). -> X/2
@@ -50,7 +50,7 @@ reaching([e(A,B)| T], N, L) :- reaching(T, N, L), !.
 %reaching([e(1,2),e(1,3),e(2,3)],1,L). -> L/[2,3]
 %reaching([e(1,2),e(1,2),e(2,3)],1,L). -> L/[2,2])
 
-reaching2(G, N, L) :- findall(B,  (member(e(A,B), G), A = N), L).
+reaching2(G, N, L) :- findall(B,  (member(e(N,B), G)), L).
 
 % a path from Node1 to Node2
 % if there are many path , they are showed 1-by -1
