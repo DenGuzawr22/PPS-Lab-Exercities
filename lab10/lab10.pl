@@ -70,9 +70,9 @@ maxmin([X|Xs], Max, Min, TmpMax, TmpMin) :-
 	maxmin(Xs, Max, Min, TmpMax, TmpMin).
 	
 	
-maxmin2(L, Max, Min) :- maxmin2(L, Max, Min, -9999, 9999).
+maxmin2([H|T], Max, Min) :- maxmin2(T, Max, Min, H, H).
 maxmin2([], Max, Min, Max, Min).
-maxmin2([H|T], Max, Min, TMax, TMin) :- H > TMax, maxmin2(T, Max, Min, H, TMin).
+maxmin2([H|T], Max, Min, TMax, TMin) :- H > TMax, !, maxmin2(T, Max, Min, H, TMin).
 maxmin2([H|T], Max, Min, TMax, TMin) :- H < TMin, !, maxmin2(T, Max, Min, TMax, H). 
 maxmin2([H|T], Max, Min, TMax, TMin) :- maxmin2(T, Max, Min, TMax, TMin).
 %maxmin2([2,1,11, 8, 3, 6], Max, Min) -> Max/11, Min/1

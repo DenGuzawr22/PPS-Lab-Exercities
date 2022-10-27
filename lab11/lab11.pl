@@ -32,7 +32,7 @@ fromCircList([H1, H2|T], [e(H1, H2)| T2], F) :- fromCircList([H2| T] , T2, F).
 % Deg is the number of edges leading into Node
 in_degree([], N, 0).
 in_degree([e(_,N)| T], N, C2) :- !, in_degree(T, N, C), C2 is C + 1.
-in_degree([e(_,X)| T], N, C) :- in_degree(T, N, C), !.
+in_degree([e(_,X)| T], N, C) :- in_degree(T, N, C).
 %in_degree([e(1,2), e(1,3), e(3,2)], 1, X). -> X/0
 %in_degree([e(1,2), e(1,3), e(3,2)], 2, X). -> X/2
 
@@ -53,7 +53,7 @@ reaching([e(A,B)| T], N, L) :- reaching(T, N, L), !.
 reaching2(G, N, L) :- findall(B,  (member(e(N,B), G)), L).
 
 % a path from Node1 to Node2
-% if there are many path , they are showed 1-by -1
+% if there are many path , they are showed 1-by-1
 anypath([e(FN,LN)| T], FN, LN, [e(FN,LN)]).
 anypath([e(FN, B) |T], FN, LN, [e(FN,B)| L]) :- anypath(T, B, LN, L).
 anypath([e(A,_)|T], FN, LN, L) :- anypath(T, FN, LN, L).  
