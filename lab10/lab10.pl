@@ -42,6 +42,12 @@ max([X|Xs], Max, TempMax) :-
 	X =< TempMax,
 	max(Xs, Max, TempMax).
 
+max2(L, M) :- max2(L, M, -9999).
+max2([], M, M).
+max2([H|T], M, TM) :- H > TM, !, TM2 is H, max2( T, M, TM2).
+max2([H|T], M, TM) :- max2(T, M, TM). 
+%max2([1,2,10, 2, 1], X) -> X/10
+
 
 maxmin([H|T], Max, Min) :- maxmin(T, Max, Min, H, H).
 maxmin([], Max, Min, TmpMax, TmpMin) :- 
@@ -63,6 +69,15 @@ maxmin([X|Xs], Max, Min, TmpMax, TmpMin) :-
 	X =< TmpMax,
 	maxmin(Xs, Max, Min, TmpMax, TmpMin).
 	
+	
+maxmin2(L, Max, Min) :- maxmin2(L, Max, Min, -9999, 9999).
+maxmin2([], Max, Min, Max, Min).
+maxmin2([H|T], Max, Min, TMax, TMin) :- H > TMax, maxmin2(T, Max, Min, H, TMin).
+maxmin2([H|T], Max, Min, TMax, TMin) :- H < TMin, !, maxmin2(T, Max, Min, TMax, H). 
+maxmin2([H|T], Max, Min, TMax, TMin) :- maxmin2(T, Max, Min, TMax, TMin).
+%maxmin2([2,1,11, 8, 3, 6], Max, Min) -> Max/11, Min/1
+
+	
 %===3===
 same([], []).
 same([X|Xs], [X|Ys]) :- same(Xs, Ys).
@@ -72,14 +87,16 @@ all_bigger([], []).
 all_bigger([H1|T1], [H2|T2]) :- H1 > H2, all_bigger(T1, T2).
 
 sublist([], L).
-sublist([H|T], L) :- search(H, L), sublist(T, L). 
+sublist([H|T], L) :- member(H, L), sublist(T, L).
+%sublist ([1 ,2] ,[5 ,3 ,2 ,1]). -> Yes
 
 %===4===
 seq(0, []).
 seq(N, [0|T]) :- N2 is N - 1, seq(N2, T).
 
-seqR(0, [0]).
+seqR(0, [0]) :- !.
 seqR(N, [N | T]) :- N2 is N - 1, seqR(N2, T).
+%seqR (4, X). -> X/[4, 3, 2, 1, 0]
 
 
 seqR2(N,  L) :- seqR2(N, N, L).
@@ -89,9 +106,15 @@ seqR2(N, Last, [V|List]) :-
 	V is Last - N,
 	seqR2(N2, Last, List).
 
+
+seqR22(N, L) :- seqR22(N, L, 0).
+seqR22(N, [N], N) :- !.
+seqR22(N, [C|T], C) :- C2 is C + 1, seqR22(N, T, C2). 
+%seqR22(4, X). -> X / [0,1,2,3,4]
+
 %===5===
 
-last([E], E).
+last([E], E) :- !.
 last([H|T], E) :- last(T, E).
 %last([1,2,3], X) -> X/3
 %last([1,2,3], 5) -> no
@@ -105,19 +128,22 @@ map([V2 | T2], [V | T]) :- V2 is V + 1, map(T2, T).
 
 
 filter([], []).
-filter([H|T], [H|T2]) :- H>0, filter(T, T2).
-filter([H|T], T2) :- H =< 0, filter(T, T2).
+filter([H|T], [H|T2]) :- H>0, !, filter(T, T2).
+filter([H|T], T2) :- filter(T, T2).
 %filter([1,-10,3,1,-7], X). -> X/[1,3,1]
 
+
 count([], 0).
-count([H|T], V) :- 
-	H > 0, 
-	count(T, N),
-	V is N + 1.
-count([H|T], N) :-
-	H =< 0,
-	count(T, N). 
+count([H|T], C2) :- H > 0, !, count(T,C), C2 is C + 1.
+count([H|T], C) :- count(T, C).
 %count([3,-1,8,-7,1], K).-> K/3
+
+
+find([], none).
+find([H|T], some(H)) :- H > 0, !.
+find([H|T], N) :- find(T, N).
+%find([-10, -3, -5, 20, 0, 30], X) -> X/some(20)
+
 
 dropRight([], N, []).
 dropRight(L, N, []) :- sizeD(L,Size), N >= Size.
@@ -142,22 +168,23 @@ dropRight3(L, N, [], Size) :- Size =< N.
 
 
 dropWhile([], []).
-dropWhile([H|T], [H|T]) :- H =< 0.
-dropWhile([H|T], T2) :- H > 0, dropWhile(T, T2).
+dropWhile([H|T], [H|T]) :- H =< 0, !.
+dropWhile([H|T], T2) :- dropWhile(T, T2).
 %dropWhile([1,2,3], X). -> X/[]
 %dropWhile([1,2,3,0], X).  -> X/[0]
 %dropWhile([1,2,3,0,1], X). -> X/[0,1]
 %dropWhile([0,1], X).  -> X/[0,1]
 
+% l partition (_>0), 
+% First list contains all elements that sodisfy the predicate, the second list hold others
 partition([], [], []).
-partition([], A, B).
-partition([H|T], [H|A], B) :- H > 0, partition(T,A,B).
-partition([H|T], A, [H|B]) :- H =< 0, partition(T,A,B).
+partition([H|T], [H|A], B) :- H > 0, !, partition(T, A, B).
+partition([H|T], A, [H|B]) :- partition(T, A, B). 
 %partition([-1,1,0,2,-2], A, B). -> A/[1,2] , B/[-1,0,-2]
 
 partition2([], [], []).
-partition2([H|T], [], [H|T]) :- H > 0.
-partition2([H|T], [H | T2], P2) :- H =< 0, partition2(T, T2, P2).
+partition2([H|T], [], [H|T]) :- H > 0, !.
+partition2([H|T], [H | T2], P2) :- partition2(T, T2, P2).
 
 
 reversed(L, R) :- reversed(L, [], R).
